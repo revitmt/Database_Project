@@ -1,3 +1,5 @@
+use db_project;
+
 INSERT INTO LOGIN_USER VALUES ('ali_stu', 'ali123', 'Alice', 'M', 'Lambert', 'alice@gmail.com', 'S');
 INSERT INTO LOGIN_USER VALUES ('bob_stu', 'bob123', 'Bob', 'C', 'Reeves', 'bob@gmail.com', 'S');
 INSERT INTO LOGIN_USER VALUES ('chr_stu', 'chr123', 'Chris', 'A', 'Campbell', 'chris@gmail.com', 'S');
