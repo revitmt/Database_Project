@@ -6,8 +6,8 @@ DROP PROCEDURE IF EXISTS showAvailCourseWork;
 DELIMITER $$
 CREATE PROCEDURE showAvailCourseWork(stuUsername varchar(20), type char(2))
 BEGIN
-	SELECT Name, Assign_date, Due_date, eDescription
-	FROM COURSE_WORK JOIN COURSES_ENROLLED ON eCRN=sCRN AND eSectionNum=sSectionNum
+	SELECT eCourseNum, eCRN, Name, Assign_date, Due_date, eDescription
+	FROM COURSE_WORK JOIN COURSES_ENROLLED JOIN COURSES_THIS_SEM as cc ON eCRN=sCRN AND eSectionNum=sSectionNum AND sCRN = cc.CRN
 	WHERE sUserName = stuUsername AND Work_type = type;
 END $$
 
@@ -18,8 +18,8 @@ DROP PROCEDURE IF EXISTS showAllAvailCourseWork;
 DELIMITER $$
 CREATE PROCEDURE showAllAvailCourseWork(stuUsername varchar(20))
 BEGIN
-	SELECT Name, Assign_date, Due_date, eDescription
-	FROM COURSE_WORK JOIN COURSES_ENROLLED ON eCRN=sCRN AND eSectionNum=sSectionNum
+	SELECT eCourseNum, eCRN, Name, Assign_date, Due_date, eDescription
+	FROM COURSE_WORK JOIN COURSES_ENROLLED JOIN COURSES_THIS_SEM as cc ON eCRN=sCRN AND eSectionNum=sSectionNum AND sCRN = cc.CRN
 	WHERE sUserName = stuUsername;
 END $$
 
@@ -31,8 +31,8 @@ DROP PROCEDURE IF EXISTS showActiveCourseWork;
 DELIMITER $$
 CREATE PROCEDURE showActiveCourseWork(stuUsername varchar(20), type char(2))
 BEGIN
-	SELECT Name, Assign_date, Due_date, eDescription
-	FROM COURSE_WORK JOIN COURSES_ENROLLED ON eCRN=sCRN AND eSectionNum=sSectionNum
+	SELECT eCourseNum, eCRN, Name, Assign_date, Due_date, eDescription
+	FROM COURSE_WORK JOIN COURSES_ENROLLED JOIN COURSES_THIS_SEM as cc ON eCRN=sCRN AND eSectionNum=sSectionNum AND sCRN = cc.CRN
 	WHERE sUserName = stuUsername AND Work_type = type AND Assign_date <= CURDATE() AND Due_date >= CURDATE();
 END $$
 
@@ -42,8 +42,8 @@ DROP PROCEDURE IF EXISTS showAllActiveCourseWork;
 DELIMITER $$
 CREATE PROCEDURE showAllActiveCourseWork(stuUsername varchar(20))
 BEGIN
-	SELECT Name, Assign_date, Due_date, eDescription
-	FROM COURSE_WORK JOIN COURSES_ENROLLED ON eCRN=sCRN AND eSectionNum=sSectionNum
+	SELECT eCourseNum, eCRN, Name, Assign_date, Due_date, eDescription
+	FROM COURSE_WORK JOIN COURSES_ENROLLED JOIN COURSES_THIS_SEM as cc ON eCRN=sCRN AND eSectionNum=sSectionNum AND sCRN = cc.CRN
 	WHERE sUserName = stuUsername AND Assign_date <= CURDATE() AND Due_date >= CURDATE();
 END $$
 
@@ -92,14 +92,14 @@ DROP PROCEDURE IF EXISTS courseWorkOfInstructor;
 DELIMITER $$
 CREATE PROCEDURE courseWorkOfInstructor(IN InsUserName varchar(20))
 BEGIN
-	SELECT Name, eCRN, eSectionNum, eDescription, Assign_date, Due_date, Work_type
+	SELECT cc.eCourseNum as CourseNum, Name, eCRN, eSectionNum, eDescription, Assign_date, Due_date, Work_type
 	FROM COURSE_WORK JOIN (
-													SELECT tCRN 
-												 	FROM COURSES_TEACHING
-												 	WHERE tUsername = InsUserName
-												) as dT 
-												ON eCRN = dT.tCRN
-												ORDER BY Due_date;
+							SELECT tCRN FROM COURSES_TEACHING
+							WHERE tUsername = InsUserName
+							) as dT 
+					 JOIN COURSES_THIS_SEM as cc
+							ON eCRN = dT.tCRN AND tCRN=cc.CRN
+							ORDER BY Due_date;
 END $$
 
 DELIMITER ;
@@ -132,6 +132,15 @@ END $$
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS DeleteEmailAlert;
+DELIMITER $$
+CREATE PROCEDURE DeleteEmailAlert(IN User_Name varchar(32), _Name varchar(20), _CRN  varchar(5))
+BEGIN
+	DELETE FROM EMAIL_ALERT WHERE Username=User_Name AND Name=_Name AND CRN=_CRN;
+END $$
+
+DELIMITER ;
+
 
 /* 17. Show email alerts */
 /* Example :
@@ -141,7 +150,9 @@ DROP PROCEDURE IF EXISTS ShowEmailAlert;
 DELIMITER $$
 CREATE PROCEDURE ShowEmailAlert(IN User_Name varchar(32))
 BEGIN
-	SELECT * FROM EMAIL_ALERT WHERE Username = User_Name;
+	SELECT c.eCourseNum as CourseNum, e.CRN as CRN, e.Name as Name 
+	FROM EMAIL_ALERT as e JOIN COURSES_THIS_SEM as c
+	WHERE e.Username = User_Name and e.CRN = c.CRN ;
 END $$
 
 DELIMITER ;
