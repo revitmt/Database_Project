@@ -32,6 +32,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
 
 	$row = mysqli_fetch_assoc($result);
 
+	$_SESSION['Usertype'] = $row["Usertype"];
+
 	if (mysqli_num_rows($result) > 0)
 	{
 		if ($row["Usertype"] == 'T')

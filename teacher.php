@@ -17,6 +17,13 @@ $passw = $_SESSION['passw'];
 // if user is not logged in redirect him to login page
 if(empty($_SESSION['login'])) 
 	header('Location: index.php');
+if( $_SESSION['Usertype'] == 'S' )
+	header('Location: student.php');
+elseif ( $_SESSION['Usertype'] != 'T' )
+{
+	session_destroy();
+	header('Location: index.php');
+}
 
 
 // Create connection
