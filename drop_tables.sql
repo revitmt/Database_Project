@@ -1,4 +1,4 @@
-use db_project;
+use vr2m;
 
 DROP TABLE EMAIL_ALERT;
 DROP TABLE COURSE_WORK;

@@ -29,7 +29,7 @@ elseif ( $_SESSION['Usertype'] != 'T' )
 // Create connection
 $conn = ConnectToServer(); 
 // connect to database
-mysqli_query($conn, "use db_project");
+mysqli_query($conn, "use vr2m");
 
 if($_SERVER["REQUEST_METHOD"]=="POST")
 {

@@ -1,4 +1,4 @@
-use db_project;
+use vr2m;
 
 CREATE TABLE LOGIN_USER
 (

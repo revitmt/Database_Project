@@ -1,4 +1,4 @@
-use db_project;
+use vr2m;
 
 
 /* 4. View available Projects */
@@ -161,7 +161,7 @@ DELIMITER ;
 
 DROP TRIGGER IF EXISTS HashPass;
 DELIMITER $$
-create trigger HashPass before insert on login_user
+create trigger HashPass before insert on LOGIN_USER
 for each row
 begin 
 IF EXISTS (SELECT NEW.Password) 

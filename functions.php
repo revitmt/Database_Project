@@ -3,9 +3,9 @@
 
 function ConnectToServer()
 {
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
+	$servername = "mysql.cs.mtsu.edu";
+	$username = "vr2m";
+	$password = "Password";
 
 	// Create connection
 	$conn = mysqli_connect($servername, $username, $password);

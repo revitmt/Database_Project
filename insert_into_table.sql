@@ -1,4 +1,4 @@
-use db_project;
+use vr2m;
 
 INSERT INTO LOGIN_USER VALUES ('ali_stu', 'ali123', 'Alice', 'M', 'Lambert', 'alice@gmail.com', 'S');
 INSERT INTO LOGIN_USER VALUES ('bob_stu', 'bob123', 'Bob', 'C', 'Reeves', 'bob@gmail.com', 'S');

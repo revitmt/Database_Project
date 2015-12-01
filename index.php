@@ -23,7 +23,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
 	// Create connection
 	$conn = ConnectToServer(); 
 	// connect to database
-	mysqli_query($conn, "use db_project");
+	mysqli_query($conn, "use vr2m");
 
 
 	// query type of the user
